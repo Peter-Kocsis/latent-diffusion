@@ -16,7 +16,7 @@ class IrradianceBase(ImageFolder):
             "relpath": np.array(paths),
             "synsets": np.array([0] * len(paths)),
             "class_label": np.array([0] * len(paths)),
-            "human_label": np.array([0] * len(paths)),
+            "human_label": np.array(["rad"] * len(paths)),
         }
 
         self.data = ImagePaths(paths,

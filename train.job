@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#SBATCH --job-name=NeuralLightDiffusion
+
+#SBATCH --nodes=1
+#SBATCH --cpus-per-gpu=8
+#SBATCH --gpus=1
+#SBATCH --constraint="a100"
+#SBATCH --mem=16GB
+
+#SBATCH --partition=submit
+#SBATCH --qos=normal
+
+#SBATCH --signal=2
+
+#SBATCH --output=/cluster/falas/pkocsis/projects/lighting-diffusion/logs/slurm/ldm_train_%A-%a.log
+#SBATCH --open-mode=append
+
+#SBATCH --time=4-00:00:00
+
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=peter.kocsis@tum.de
+
+source /usr/local/Modules/init/bash
+source /usr/local/Modules/init/bash_completion
+module load cuda/11.3
+
+echo Starting Neural Lighting training on $SLURMD_NODENAME
+echo Starting command: python main.py --base configs/latent-diffusion/irradiance_toy.yaml -t --gpus 0,
+echo ========================================================================================
+
+python -u main.py --base configs/latent-diffusion/irradiance_toy.yaml -t --gpus 0,
