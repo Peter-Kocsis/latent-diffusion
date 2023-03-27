@@ -8,3 +8,5 @@ latent_diffusion.egg-info/
 logs/
 
 src/
+
+data/

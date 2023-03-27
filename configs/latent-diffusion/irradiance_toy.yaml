@@ -70,20 +70,20 @@ model:
 data:
   target: main.DataModuleFromConfig
   params:
-    batch_size: 16
+    batch_size: 1
     num_workers: 12
     wrap: false
     train:
       target: ldm.data.irradiance.IrradianceBase
       params:
         config:
-          root: /home/kocsis/work/projects/lighting_generation/diffusers/diffusers/examples/unconditional_image_generation/rad_images
+          root: data/irradiance
           size: 256
     validation:
       target: ldm.data.irradiance.IrradianceBase
       params:
         config:
-          root: /home/kocsis/work/projects/lighting_generation/diffusers/diffusers/examples/unconditional_image_generation/rad_images
+          root: data/irradiance
           size: 256
 
 
