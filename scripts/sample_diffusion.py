@@ -51,17 +51,20 @@ def logs2pil(logs, keys=["sample"]):
 
 
 @torch.no_grad()
-def convsample(model, shape, return_intermediates=True,
+def convsample(model,
+               shape,
+               cond=None,
+               return_intermediates=True,
                verbose=True,
                make_prog_row=False):
 
 
     if not make_prog_row:
-        return model.p_sample_loop(None, shape,
+        return model.p_sample_loop(cond, shape,
                                    return_intermediates=return_intermediates, verbose=verbose)
     else:
         return model.progressive_denoising(
-            None, shape, verbose=True
+            cond, shape, verbose=True
         )
 
 
@@ -76,7 +79,7 @@ def convsample_ddim(model, steps, shape, eta=1.0
 
 
 @torch.no_grad()
-def make_convolutional_sample(model, batch_size, vanilla=False, custom_steps=None, eta=1.0,):
+def make_convolutional_sample(model, batch_size, vanilla=False, custom_steps=None, eta=1.0, cond=None):
 
 
     log = dict()
@@ -90,7 +93,8 @@ def make_convolutional_sample(model, batch_size, vanilla=False, custom_steps=Non
         t0 = time.time()
         if vanilla:
             sample, progrow = convsample(model, shape,
-                                         make_prog_row=True)
+                                         make_prog_row=False,
+                                         cond=cond)
         else:
             sample, intermediates = convsample_ddim(model,  steps=custom_steps, shape=shape,
                                                     eta=eta)
@@ -225,7 +229,7 @@ def load_model_from_config(config, sd):
     return model
 
 
-def load_model(config, ckpt, gpu, eval_mode):
+def load_model(config, ckpt, gpu=None, eval_mode=None):
     if ckpt:
         print(f"Loading model from {ckpt}")
         pl_sd = torch.load(ckpt, map_location="cpu")
